@@ -2,6 +2,7 @@ from ..latex import get_symbols_for
 
 unary_functions = get_symbols_for("unary_functions", "asciimath")
 binary_functions = get_symbols_for("binary_functions", "asciimath")
+operation_symbols = get_symbols_for("operation_symbols", "asciimath")
 left_parenthesis = get_symbols_for("left_parenthesis", "asciimath")
 right_parenthesis = get_symbols_for("right_parenthesis", "asciimath")
 

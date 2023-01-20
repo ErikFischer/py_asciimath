@@ -8,13 +8,18 @@ from ..translation.latex2asciimath import (
     unary_functions,
     binary_functions,
 )
+"""
 
-
+\[
+\begin{array}{ccc}{(a+b)}^{2}& =& {c}^{2}+4\cdot \left(\frac{1}{2}ab\right)\\ {a}^{2}+2ab+{b}^{2}& =& {c}^{2}+2ab\\ {a}^{2}+{b}^{2}& =& {c}^{2}\end{array}
+\]
+"""
 latex_grammar = r"""
     %import common.WS
     %import common.LETTER
     %import common.NUMBER
     %ignore WS
+    %ignore "&"
     start: "\\[" exp "\\]" -> exp
         | "$$" exp "$$" -> exp
         | "$" exp "$" -> exp
@@ -27,6 +32,7 @@ latex_grammar = r"""
     s: _l exp? _r -> exp_par
         | "\\left" (_l | /\./ | /\\vert/ | /\\mid/) start? "\\right" (_r | /\./ | /\\vert/ | /\\mid/) -> exp_par
         | "\\begin{{matrix}}" row_mat (/\\\\/ row_mat?)* "\\end{{matrix}}" -> exp_mat
+        | "\\begin{{array}}" centering exp (/\\\\/ exp?)* "\\end{{array}}" -> exp_arr
         | /\\sqrt/ "[" i+ "]" "{{" exp "}}" -> exp_binary
         | "{{" i+ "}}" -> exp
         | _u "{{" exp "}}" -> exp_unary
@@ -34,6 +40,8 @@ latex_grammar = r"""
         | _latex1 -> symbol
         | _latex2 -> symbol
         | _c -> const
+    centering: "{{"(centering_lett)*"}}" -> cent_exp
+    centering_lett: "a".."z"
     !_c: NUMBER
         | LETTER
     !row_mat: exp ("&" exp?)* -> row_mat

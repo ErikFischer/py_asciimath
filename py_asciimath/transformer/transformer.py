@@ -16,6 +16,7 @@ from ..translation.asciimath2mathml import right_parenthesis as mathml_right
 from ..translation.asciimath2mathml import smb as mathml_smb
 from ..translation.asciimath2mathml import unary_functions as mathml_una
 from ..translation.latex2asciimath import binary_functions as l2mml_bin
+from ..translation.latex2asciimath import operation_symbols as l2mml_oper
 from ..translation.latex2asciimath import left_parenthesis as l2mml_left
 from ..translation.latex2asciimath import right_parenthesis as l2mml_right
 from ..translation.latex2asciimath import smb as l2mml_smb
@@ -393,9 +394,7 @@ class Tex2ASCIIMathTransformer(MathTransformer):  # pragma: no cover
 
     @log
     def exp_super(self, items):
-        items[0] = self.remove_parenthesis(items[0])
-        items[1] = self.remove_parenthesis(items[1])
-        return "(" + items[0] + ")^(" + items[1] + ")"
+        return items[0] + "^" + items[1]
 
     @log
     def exp_under_super(self, items):
@@ -420,7 +419,7 @@ class Tex2ASCIIMathTransformer(MathTransformer):  # pragma: no cover
             right = ":|"
         elif right != "]":
             right = l2mml_right[items[-1].value]
-        return left + " ".join(items[1:-1]) + right
+        return left + "".join(items[1:-1]) + right
 
     @log
     def exp_unary(self, items):
@@ -430,6 +429,10 @@ class Tex2ASCIIMathTransformer(MathTransformer):  # pragma: no cover
     def exp_binary(self, items):
         if items[0].startswith("\\sqrt"):
             return "root(" + "".join(items[1:-1]) + ")(" + items[-1] + ")"
+        if items[0].startswith("\\frac"):
+            return items[1] + "/" + items[2]
+        if any([items[0].startwith(oper) for oper in l2mml_oper]):
+            return items[1] + l2mml_oper[items[0]] + items[2]
         return l2mml_bin[items[0]] + "(" + items[1] + ")(" + items[2] + ")"
 
     @log
@@ -460,5 +463,29 @@ class Tex2ASCIIMathTransformer(MathTransformer):  # pragma: no cover
         return self._get_row(items, sep="\\\\", mat=True)
 
     @log
+    def exp_mat(self, items):
+        return self._get_row(items, sep="\\\\", mat=True)
+
+
+    @log
     def row_mat(self, items):
         return self._get_row(items, sep="&")
+
+    def _get_line(self, items, sep="\\\\"):
+        s = ""
+        for i in items:
+            if i == sep:
+                i = "\n"
+            s = s + i
+        return s
+
+    def cent_exp(self, items):
+        return ""
+
+    @log
+    def exp_arr(self, items):
+        return self._get_line(items)
+
+    @log
+    def arr_line(self, items):
+        return "".join(items)
