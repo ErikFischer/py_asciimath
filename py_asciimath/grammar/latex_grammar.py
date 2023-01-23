@@ -8,12 +8,7 @@ from ..translation.latex2asciimath import (
     unary_functions,
     binary_functions,
 )
-"""
 
-\[
-\begin{array}{ccc}{(a+b)}^{2}& =& {c}^{2}+4\cdot \left(\frac{1}{2}ab\right)\\ {a}^{2}+2ab+{b}^{2}& =& {c}^{2}+2ab\\ {a}^{2}+{b}^{2}& =& {c}^{2}\end{array}
-\]
-"""
 latex_grammar = r"""
     %import common.WS
     %import common.LETTER
@@ -40,7 +35,8 @@ latex_grammar = r"""
         | _latex1 -> symbol
         | _latex2 -> symbol
         | _c -> const
-    centering: "{{"(centering_lett)*"}}" -> cent_exp
+        | "\\phantom" "{{\\rule"("{{"NUMBER+ LETTER+"}}")*"}}" -> ignore
+    centering: "{{"(centering_lett)*"}}" -> ignore
     centering_lett: "a".."z"
     !_c: NUMBER
         | LETTER

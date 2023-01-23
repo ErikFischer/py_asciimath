@@ -479,7 +479,7 @@ class Tex2ASCIIMathTransformer(MathTransformer):  # pragma: no cover
             s = s + i
         return s
 
-    def cent_exp(self, items):
+    def ignore(self, items):
         return ""
 
     @log

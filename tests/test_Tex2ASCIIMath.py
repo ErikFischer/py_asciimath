@@ -26,7 +26,7 @@ class TestTex2ASCIIMath(unittest.TestCase):
         )
         self.assertEqual(
             s,
-            "((1 , 2)) int sin frac((x)^(2))(4) pi text(d x) root(5)((x)_(1)^(2) + (x)_(2)^(2))",
+            "((1 , 2)) int sin x^2/4 pi text(d x) root(5)((x)_(1)^(2) + (x)_(2)^(2))",
         )
 
     # def test_tex2asciimath_ok_3(self):
