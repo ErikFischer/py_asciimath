@@ -56,6 +56,10 @@ unary_functions = {
         "asciimath": "bbb",
         "mathml": "<mstyle mathvariant='double-struck'>{}</mstyle>",
     },
+    "\\mathbf": {
+        "asciimath": "bbb",
+        "mathml": "<mstyle mathvariant='double-struck'>{}</mstyle>",
+    },
     "\\mathcal": {
         "asciimath": "cc",
         "mathml": "<mstyle mathvariant='script'>{}</mstyle>",
@@ -102,14 +106,17 @@ unary_functions = {
 operation_symbols = {
     "+": {"asciimath": "+", "mathml": "+"},
     "\\cdot": {"asciimath": ["*", "cdot"], "mathml": "&sdot;"},
+    "·": {"asciimath": ["*", "cdot"], "mathml": "&sdot;"},
     "-": {"asciimath": "-", "mathml": "-"},
+    "‐": {"asciimath": "-", "mathml": "-"},  # Totally different from the one above
+    "–": {"asciimath": "-", "mathml": "-"},  # Also totally different from the one above, be aware
     "*": {"asciimath": ["**", "ast"], "mathml": "&ast;"},
     "\\ast": {"asciimath": ["**", "ast"], "mathml": "&ast;"},
     "\\star": {"asciimath": ["***", "star"], "mathml": "&Star;"},
     "/": {"asciimath": "//", "mathml": "/"},
     "\\setminus": {"asciimath": [r"\\", "setminus"], "mathml": "&setminus;"},
-    "\\times": {"asciimath": ["xx", "times"], "mathml": "&times;"},
-    "\\div": {"asciimath": ["-:", "div"], "mathml": "&div;"},
+    "\\times": {"asciimath": ["*", "times"], "mathml": "&times;"},
+    "\\div": {"asciimath": ["/", "div"], "mathml": "&div;"},
     "\\ltimes": {"asciimath": ["|><", "ltimes"], "mathml": "&ltimes;"},
     "\\rtimes": {"asciimath": ["><|", "rtimes"], "mathml": "&rtimes;"},
     "\\bowtie": {"asciimath": ["|><|", "bowtie"], "mathml": "&bowtie;"},
@@ -117,8 +124,8 @@ operation_symbols = {
     "\\oplus": {"asciimath": ["o+", "oplus"], "mathml": "&oplus;"},
     "\\otimes": {"asciimath": ["ox", "otimes"], "mathml": "&times;"},
     "\\odot": {"asciimath": ["o.", "odot"], "mathml": "&odot;"},
-    "\\sum": {"asciimath": "sum", "mathml": "&sum;"},
-    "\\prod": {"asciimath": "prod", "mathml": "&prod;"},
+    "\\sum": {"asciimath": "∑", "mathml": "&sum;"},
+    "\\prod": {"asciimath": "∏", "mathml": "&prod;"},
     "\\wedge": {"asciimath": ["^^", "wedge"], "mathml": "&wedge;"},
     "\\bigwedge": {"asciimath": ["^^^", "bigwedge"], "mathml": "&bigwedge;"},
     "\\vee": {"asciimath": ["vv", "vee"], "mathml": "&vee;"},
@@ -272,6 +279,7 @@ arrows = {
         "asciimath": ["rarr", "rArr", "rightarrow"],
         "mathml": "&rarr;",
     },
+    "\\overrightarrow": {"asciimath": ["rarr", "rightarrow"], "mathml": "&rarr;"},
     "\\to": {"asciimath": ["->", "to"], "mathml": "&rightarrow;"},
     "\\rightarrowtail": {
         "asciimath": [">->", "rightarrowtail"],
@@ -286,6 +294,7 @@ arrows = {
         "mathml": "&Rarrtl;",
     },
     "\\mapsto": {"asciimath": ["|->", "mapsto"], "mathml": ""},
+    "\\overleftrightarrow": {"asciimath": ["larr", "leftarrow"], "mathml": "&larr;"},
     "\\leftarrow": {"asciimath": ["larr", "leftarrow"], "mathml": "&larr;"},
     "\\leftrightarrow": {
         "asciimath": ["harr", "leftrightarrow"],
@@ -303,12 +312,19 @@ colors = {
 }
 
 misc_symbols = {
+    "⏜": {"asciimath": "⏜", "mathml": "&#x5E;"},
+    "ϵ": {"asciimath": "ϵ", "mathml": "&#x5E;"},
+    "\\%": {"asciimath": "%", "mathml": "&#x5E;"},
+    "`": {"asciimath": "`", "mathml": "&#x5E;"},
+    "？": {"asciimath": "?", "mathml": "&#x5E;"},  # What kind of absolute maniac would ever use this
+    "°": {"asciimath": "°", "mathml": "&#x5E;"},
     "^": {"asciimath": "^", "mathml": "&#x5E;"},
     ",": {"asciimath": ",", "mathml": ","},
     ".": {"asciimath": ".", "mathml": "."},
     "_": {"asciimath": "_", "mathml": "_"},
     "'": {"asciimath": "'", "mathml": "'"},
     "|": {"asciimath": "|", "mathml": "|"},
+    "\\parallel": {"asciimath": "∥", "mathml": "∥"},
     "\\vert": {"asciimath": "|", "mathml": "|"},
     "\\mid": {"asciimath": "|", "mathml": "|"},
     ":": {"asciimath": ":", "mathml": ":"},
@@ -326,7 +342,8 @@ misc_symbols = {
     "\\cdots": {"asciimath": "cdots", "mathml": "&ctdot;"},
     "\\vdots": {"asciimath": "vdots", "mathml": "&vellip;"},
     "\\ddots": {"asciimath": "ddots", "mathml": "&dtdot;"},
-    "\\quad": {"asciimath": "quad", "mathml": "&nbsp;"},
+    "\\quad": {"asciimath": " ", "mathml": "&nbsp;"},
+    " ": {"asciimath": " ", "mathml": "&nbsp;"},
     "\\angle": {"asciimath": ["/_", "angle"], "mathml": "&angle;"},
     "\\frown": {"asciimath": "frown", "mathml": "&frown;"},
     "\\triangle": {

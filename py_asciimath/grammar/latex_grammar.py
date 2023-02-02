@@ -18,26 +18,43 @@ latex_grammar = r"""
     start: "\\[" exp "\\]" -> exp
         | "$$" exp "$$" -> exp
         | "$" exp "$" -> exp
+        | "$" exp "$" -> exp
         | exp -> exp
     exp: i exp* -> exp
-    i: s -> exp_interm
+    i: s -> exp_interm 
         | s "_" s -> exp_under
         | s "^" s -> exp_super
         | s "_" s "^" s -> exp_under_super
-    s: _l exp? _r -> exp_par
-        | "\\left" (_l | /\./ | /\\vert/ | /\\mid/) start? "\\right" (_r | /\./ | /\\vert/ | /\\mid/) -> exp_par
+    s: "{{}}" -> ignore
+        | _l -> l
+        | _r -> r
         | "\\begin{{matrix}}" row_mat (/\\\\/ row_mat?)* "\\end{{matrix}}" -> exp_mat
         | "\\begin{{array}}" centering exp (/\\\\/ exp?)* "\\end{{array}}" -> exp_arr
         | /\\sqrt/ "[" i+ "]" "{{" exp "}}" -> exp_binary
         | "{{" i+ "}}" -> exp
         | _u "{{" exp "}}" -> exp_unary
-        | _b "{{" exp "}}" "{{" exp "}}" -> exp_binary
+        | _b modifier? "{{" exp "}}" "{{" exp "}}" -> exp_binary
         | _latex1 -> symbol
         | _latex2 -> symbol
         | _c -> const
+        | double_backslash literal -> literals
+        | ";" -> literal
+        | "?" -> literal
         | "\\phantom" "{{\\rule"("{{"NUMBER+ LETTER+"}}")*"}}" -> ignore
-    centering: "{{"(centering_lett)*"}}" -> ignore
-    centering_lett: "a".."z"
+        | "\\displaystyle" -> ignore
+        | "\\hspace{{" ignore_numbers ignore_letters "}}" -> ignore
+        | "\\left" -> ignore
+        | "\\right" -> ignore
+        | "\\math" -> ignore
+    double_backslash: "\\" -> ignore
+    modifier: "[" LETTER+ "]" -> ignore
+    centering: "{{" ignore_letters "}}" -> ignore
+    ignore_letters: (ignore_letter)+ -> ignore
+    ignore_numbers: (ignore_number)+ (ignore_dot ignore_number*)? -> ignore
+    ignore_letter: "a".."z" -> ignore
+    ignore_number: "0".."9"
+    ignore_dot: "." -> ignore
+    !literal: "#"|"$"|"§"|";"|"_"|"?"
     !_c: NUMBER
         | LETTER
     !row_mat: exp ("&" exp?)* -> row_mat

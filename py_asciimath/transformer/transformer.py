@@ -29,18 +29,19 @@ from ..utils.utils import UtilsMat, encapsulate_mrow
     def __init__(self):
         pass """
 
+
 # ["\\(", "\\(:", "\\[", "\\{", "\\{:"]
 # ["\\)", ":\\)", "\\]", "\\}", ":\\}"]
 
 
 class MathTransformer(Transformer):  # pragma: no cover
     def __init__(
-        self,
-        log=True,
-        start_end_par_pattern="{}{}",
-        left_par=[],
-        right_par=[],
-        visit_tokens=False,
+            self,
+            log=True,
+            start_end_par_pattern="{}{}",
+            left_par=[],
+            right_par=[],
+            visit_tokens=False,
     ):
         Transformer.__init__(self, visit_tokens=visit_tokens)
         formatted_left_parenthesis = "|".join(left_par)
@@ -156,15 +157,15 @@ class ASCIIMath2TexTransformer(MathTransformer):
             if yeah_mat:
                 s = UtilsMat.get_latex_mat(s, row_par)
         lpar = (
-            "\\left"
-            + latex_left[items[0]]
-            + (" " if items[0] == "langle" else "")
+                "\\left"
+                + latex_left[items[0]]
+                + (" " if items[0] == "langle" else "")
         )
         rpar = "\\right" + latex_right[items[-1]]
         return (
-            lpar
-            + ("\\begin{matrix}" + s + "\\end{matrix}" if yeah_mat else s)
-            + rpar
+                lpar
+                + ("\\begin{matrix}" + s + "\\end{matrix}" if yeah_mat else s)
+                + rpar
         )
 
     @MathTransformer.log
@@ -284,14 +285,14 @@ class ASCIIMath2MathMLTransformer(MathTransformer):
         yeah_mat = False
         s = ", ".join(items[1:-1])
         if re.match(
-            r"^<mrow><mo>(\[|\(|\{|\{:|\|:|\|\|:|<<|\(:|langle)</mo>", s
+                r"^<mrow><mo>(\[|\(|\{|\{:|\|:|\|\|:|<<|\(:|langle)</mo>", s
         ):
             yeah_mat, row_par = UtilsMat.check_mat(s)
             if yeah_mat:
                 s = (
-                    "<mtable>"
-                    + UtilsMat.get_mathml_mat(s, row_par)
-                    + "</mtable>"
+                        "<mtable>"
+                        + UtilsMat.get_mathml_mat(s, row_par)
+                        + "</mtable>"
                 )
         lpar = mathml_left[items[0]]
         rpar = mathml_right[items[-1]]
@@ -404,34 +405,22 @@ class Tex2ASCIIMathTransformer(MathTransformer):  # pragma: no cover
         return "(" + items[0] + ")_(" + items[1] + ")^(" + items[2] + ")"
 
     @log
-    def exp_par(self, items):
-        left = items[0].value
-        right = items[-1].value
-        if left == ".":
-            left = "{:"
-        elif left in ["\\vert", "\\mid"]:
-            left = "|:"
-        elif left != "[":
-            left = l2mml_left[items[0].value]
-        if right == ".":
-            right = ":}"
-        elif right in ["\\vert", "\\mid"]:
-            right = ":|"
-        elif right != "]":
-            right = l2mml_right[items[-1].value]
-        return left + "".join(items[1:-1]) + right
-
-    @log
     def exp_unary(self, items):
         return l2mml_una[items[0]] + "(" + items[1] + ")"
 
     @log
-    def exp_binary(self, items):
+    def exp_binary(self, items: list):
+        # Remove ignored/empty modifier
+        if len(items) > 3:
+            items.pop(1)
+        if items[0] in ["\\textcolor"]:
+            return items[2]
+
         if items[0].startswith("\\sqrt"):
             return "root(" + "".join(items[1:-1]) + ")(" + items[-1] + ")"
         if items[0].startswith("\\frac"):
             return items[1] + "/" + items[2]
-        if any([items[0].startwith(oper) for oper in l2mml_oper]):
+        if any([items[0].startswith(oper) for oper in l2mml_oper]):
             return items[1] + l2mml_oper[items[0]] + items[2]
         return l2mml_bin[items[0]] + "(" + items[1] + ")(" + items[2] + ")"
 
@@ -462,10 +451,41 @@ class Tex2ASCIIMathTransformer(MathTransformer):  # pragma: no cover
     def exp_mat(self, items):
         return self._get_row(items, sep="\\\\", mat=True)
 
+    def r(self, items):
+        right = items[0]
+        if right == ".":
+            right = ":}"
+        elif right in ["\\vert", "\\mid"]:
+            right = ":|"
+        elif right not in "[]()":
+            right = l2mml_right[items[-1].value]
+        return right
+
+    def l(self, items):
+        left = items[0]
+        if left == ".":
+            left = "{:"
+        elif left in ["\\vert", "\\mid"]:
+            left = "|:"
+        elif left not in "[]()":
+            left = l2mml_left[items[0].value]
+        return left
+
     @log
     def exp_mat(self, items):
         return self._get_row(items, sep="\\\\", mat=True)
 
+    @log
+    def literals(self, items):
+        return "".join(items)
+
+    @log
+    def literal(self, items):
+        return "".join(items)
+
+    @log
+    def section(self, items):
+        return "§"
 
     @log
     def row_mat(self, items):
