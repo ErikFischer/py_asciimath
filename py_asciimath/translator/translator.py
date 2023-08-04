@@ -405,7 +405,7 @@ class MathML2Tex(Translator):  # pragma: no cover
     def __init__(self):
         super(MathML2Tex, self).__init__()
         transformer = lxml.etree.parse(
-            open(PROJECT_ROOT + "/translation/mathml2tex/mmltex.xsl", "rb")
+            open(os.path.join(PROJECT_ROOT, "translation", "mathml2tex", "mmltex.xsl",), "rb")
         )
         self.transformer = lxml.etree.XSLT(transformer)
 

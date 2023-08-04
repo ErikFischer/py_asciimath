@@ -1,10 +1,11 @@
 import logging
+import os
 import re
 
 import lxml.etree
 
 from .. import PROJECT_ROOT
-
+import pathlib
 
 class MathMLParser(object):
 
@@ -180,8 +181,8 @@ class MathMLParser(object):
                 if network
                 else "SYSTEM "
                 + '"'
-                + PROJECT_ROOT
-                + '/dtd/mathml3/mathml3.dtd"'
+                + pathlib.Path(os.path.join(PROJECT_ROOT, 'dtd', 'mathml3', 'mathml3.dtd')).as_posix()
+                + '"'
             )
         elif dtd.lower() == "mathml1":
             doctype = doctype.format(
@@ -189,7 +190,9 @@ class MathMLParser(object):
                 + (
                     '"http://www.w3.org/Math/DTD/mathml1/mathml.dtd"'
                     if network
-                    else '"' + PROJECT_ROOT + '/dtd/mathml1/mathml1.dtd"'
+                    else '"'
+                         + pathlib.Path(os.path.join(PROJECT_ROOT, 'dtd', 'mathml1', 'mathml1.dtd')).as_posix()
+                         + '"'
                 )
             )
         elif dtd.lower() == "mathml2":
@@ -199,8 +202,8 @@ class MathMLParser(object):
                 if network
                 else "SYSTEM "
                 + '"'
-                + PROJECT_ROOT
-                + '/dtd/mathml2/mathml2.dtd"'
+                + pathlib.Path(os.path.join(PROJECT_ROOT, 'dtd', 'mathml2', 'mathml2.dtd')).as_posix()
+                + '"'
             )
         else:
             raise NotImplementedError(
