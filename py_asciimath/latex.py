@@ -342,8 +342,8 @@ misc_symbols = {
     "\\cdots": {"asciimath": "cdots", "mathml": "&ctdot;"},
     "\\vdots": {"asciimath": "vdots", "mathml": "&vellip;"},
     "\\ddots": {"asciimath": "ddots", "mathml": "&dtdot;"},
-    "\\quad": {"asciimath": " ", "mathml": "&nbsp;"},
-    " ": {"asciimath": " ", "mathml": "&nbsp;"},
+    "\\quad": {"asciimath": " ", "mathml": "&nbsp;"},
+    " ": {"asciimath": " ", "mathml": "&nbsp;"},
     "\\angle": {"asciimath": ["/_", "angle"], "mathml": "&angle;"},
     "\\frown": {"asciimath": "frown", "mathml": "&frown;"},
     "\\triangle": {
